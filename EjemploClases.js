@@ -113,7 +113,7 @@ let producto = new ProductManager()
 // producto.addProduct('leche', 'larga vida', 400, 'sin imagen', 2, 20)
 // producto.addProduct('leche', 'larga vida', 400, 'sin imagen', 2, 20)
 // producto.addProduct('queso', 'dambo', 600, 'sin imagen', 3, 80)
-producto.addProduct('salame', 'carolla', 800, 'sin imagen', 5, 300);
+// producto.addProduct('salame', 'carolla', 800, 'sin imagen', 5, 300);
 // producto.upDateProduct(2, 'leche', 'larga vida', 700, 'sin imagen', 2, 20)
 // producto.deleteProduct(1)
 // producto.getProductById(2);
