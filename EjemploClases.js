@@ -114,6 +114,13 @@ let producto = new ProductManager()
 // producto.addProduct('leche', 'larga vida', 400, 'sin imagen', 2, 20)
 // producto.addProduct('queso', 'dambo', 600, 'sin imagen', 3, 80)
 // producto.addProduct('salame', 'carolla', 800, 'sin imagen', 5, 300);
+// producto.addProduct('choclo', 'cremoso', 100, 'sin imagen', 6, 100)
+// producto.addProduct('choclo', 'grano', 200, 'sin imagen', 7, 200)
+// producto.addProduct('salsa', 'bolognesa', 200, 'sin imagen', 8, 180)
+// producto.addProduct('jabon', 'tocador', 500, 'sin imagen', 9, 300);
+// producto.addProduct('shampoo', 'c.graso', 200, 'sin imagen', 10, 280)
+// producto.addProduct('afeitadora', 'gillete', 800, 'sin imagen', 11, 300);
+producto.addProduct('perfume', 'avon', 300, 'sin imagen', 12, 500);
 // producto.upDateProduct(2, 'leche', 'larga vida', 700, 'sin imagen', 2, 20)
 // producto.deleteProduct(1)
 // producto.getProductById(2);

@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended:true }));
 
 app.get("/products", async (req, res) => {    
     const products = await productManager.getProducts();        
-    const limite = req.query.limite
+    const limite = req.query.limit
     console.log(limite)
     if(!limite || limite === 0) {
         return res.send(products); 
