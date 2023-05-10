@@ -18,6 +18,7 @@ export default class ProductManager {
             title:title,
             description: description,
             price:price,
+            status:true,
             thumbnail:thumbnail,
             code:code,
             stock:stock,                                   
@@ -33,9 +34,8 @@ export default class ProductManager {
 		    if (productoCodigo !== -1) {            
 			    console.log('Producto Existente');
 			    return; 
-		    }else {
-            
-                // console.log(this.products)                
+		    }else {            
+                             
                 const actualProducts = await this.getProducts();
                 
                 actualProducts.push(product);    
@@ -54,8 +54,7 @@ export default class ProductManager {
 
     #getId() {
         this.#id++;        
-		return this.#id;        
-       
+		return this.#id;       
     }
 
     async getProducts() {
@@ -120,7 +119,8 @@ let producto = new ProductManager()
 // producto.addProduct('jabon', 'tocador', 500, 'sin imagen', 9, 300);
 // producto.addProduct('shampoo', 'c.graso', 200, 'sin imagen', 10, 280)
 // producto.addProduct('afeitadora', 'gillete', 800, 'sin imagen', 11, 300);
-producto.addProduct('perfume', 'avon', 300, 'sin imagen', 12, 500);
+producto.addProduct('perfume', 'colbert', 400, 'sin imagen', 13, 500);
 // producto.upDateProduct(2, 'leche', 'larga vida', 700, 'sin imagen', 2, 20)
 // producto.deleteProduct(1)
 // producto.getProductById(2);
+
