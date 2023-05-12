@@ -5,12 +5,20 @@ let cartManager = new CartManager();
 
 const cartRouter = Router();
 
+cartRouter.post('/', async(req, res) => {
+        
+  const newCart = req.body;
+  const cart = cartManager.createCart(newCart);
+  res.status(201).send(cart)    
+  
+});  
 
 cartRouter.post('/:cid/product/:pid', async(req, res) => {
         
-    let carrito = req.body;
-    let pos = cartManager.addCart(carrito);
-    res.status(201).send(pos, carrito)    
+    let cartId = req.params.cid;
+    let productId = req.params.pid;
+    const product = cartManager.addCart(cartId, productId)
+    res.status(201).send(product)    
     
   });  
 

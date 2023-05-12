@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 export default class CartManager {
-    #idCart = 0;
+    
     constructor(){
         
         if (!fs.existsSync('./carrito.json')) {
@@ -10,65 +10,75 @@ export default class CartManager {
 			fs.writeFileSync('./carrito.json', JSON.stringify([]));
 		} 
         this.path = './carrito.json';                       
-    }     
+    } 
     
-    async addCart(listProduct) {
-        const newCart = {            
-            products:[listProduct]
-        }
-        newCart.id = this.#getId();
+    async createCart() {
+        const newCart = {
+            id: Date.now(),
+            products: [],
+        };
+        const carts = await fs.promises.readFile (this.path, 'utf-8');
+        carts.push(newCart);
+        await fs.promises.writeFile(
+            this.path,
+            JSON.stringify(carts) // Transformo el array en string
+        );
+        return newCart;
+    }
+    
+    async addCart(cartId, productId, quantity = 1) {        
+        
         const contenido = await fs.promises.readFile (this.path, 'utf-8');
     
-        const carritos = JSON.parse(contenido);             
+        const carts = JSON.parse(contenido);                   
         
-        const cartId = carritos.find(
-			(e) => e.products.code === listProduct.products.code
+        const cartIndex = carts.findIndex(
+			(cart) => cart.id === cartId
 		);
 		try {
-		    if (cartId) {            
-			    carritos.map((cart) => cart[products].quantity++) 
-                                    
-			    return carritos; 
-		    }else {            
-                             
-                const actualCarrito = await this.getCart();
-                
-                actualCarrito.push(newCart);    
-                
-                await fs.promises.writeFile(
-                    this.path,
-                    JSON.stringify(actualCarrito) // Transformo el array en string
-                );
+		    if (cartIndex !== -1) {            
+			    throw new Error('Carrito inexistente');
+		    }
+            const productIndex = carts[cartIndex].products.findIndex((product) => product.id === productId);
+            if (productIndex === -1) {
+                carts[cartIndex].products.push({
+                id: productId,
+                quantity,
+                });
+            } else {   
+                carts[cartIndex].products[productIndex].quantity += quantity;                
             }
+                await fs.promises.writeFile(this.path, JSON.stringify(carts));
+                return carts[cartIndex];
         } catch (err) {                
                 // Si hay error imprimo el error en consola
                 console.log('No puedo agregar el carrito');
-            }         
+        }       
                  
-    }
-
-    #getId() {
-        this.#idCart++;        
-		return this.#idCart;       
-    }
+    }  
     
-    async getCart() {
+    async getCart(cartId) {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8');
-            return JSON.parse(data);       
+            const cartData = JSON.parse(data);
+            const cart = cartData.find((cart) => cart.id === cartId);
+            if (!cart) {
+                throw new Error('Carrito inexistente');
+            }  
+            return cart;     
                                  
-          } catch (error) {
+        } catch (error) {
             console.log('Error al cargar los carritos');
-          }
+        }
     }    
     
 
-    async deleteProduct(id) {
-        const productos = await this.getCart();
-        const index = productos.find(product => product.id === id);
+    async deleteProduct(carId) {
+        const carts = await this.getCart();
+        const index = carts.find(cart => cart.id === carId);
         if (index) {
-        const prodActualizado = productos.filter(product => product.id !== id);
-        await fs.promises.writeFile(this.path, JSON.stringify(prodActualizado));     
+        const cartActualizado = carts.filter(cart => cart.id !== carId);
+        await fs.promises.writeFile(this.path, JSON.stringify(cartActualizado));     
         }    
     }    
 

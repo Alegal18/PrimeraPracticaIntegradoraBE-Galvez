@@ -35,7 +35,7 @@ productsRouter.get("/:pid", async (req, res) => {
 productsRouter.post('/', (req, res) => {
     let product = req.body;
     let pos = productManager.addProduct(product);
-    res.status(201).send(pos, product)
+    res.status(201).send(pos)
 })
 
 productsRouter.put("/:pid", async (req, res) => {
