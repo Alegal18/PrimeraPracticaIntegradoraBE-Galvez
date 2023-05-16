@@ -1,38 +1,42 @@
 import { Router } from 'express';
 import CartManager from '../../cartManager.js';
 
-let cartManager = new CartManager();
-
 const cartRouter = Router();
+
+let cartManager = new CartManager();
 
 cartRouter.post('/', async(req, res) => {
         
-  const newCart = req.body;
-  const cart = cartManager.createCart(newCart);
-  res.status(201).send(cart)    
+  const crearCarrito = await cartManager.addCart()
+    
+    try {
+        res.status(201).send(crearCarrito);
+    } catch (error) {
+        res.status(400).send({ error });
+    }
+});    
   
-});  
 
 cartRouter.post('/:cid/product/:pid', async(req, res) => {
         
-    let cartId = req.params.cid;
-    let productId = req.params.pid;
+    let cartId = Number(req.params.cid);
+    let productId = Number(req.params.pid);
     const product = cartManager.addCart(cartId, productId)
     res.status(201).send(product)    
     
   });  
 
-  cartRouter.get('/', async (req,res) =>{
+  cartRouter.get('/:cid', async (req,res) =>{
   
-    const carts = await cartManager.getCart();
-    const cartId = parseInt(req.params.cid);
-    const carrito = carts.find(carts => carts.id === cartId)
-    if(!carrito){
-        res.status(400).send({status:"error", message:"CARRITO NO ENCONTRADO"});
-        return
-    };
-     res.status(200).send({status:"success", carrito});
+    try {
+      const id = Number(req.params.cid);
+    let getID = await cartManager.getCart(id);
+      res.status(200).send(await getID);
+  } catch (err) {
+      res.status(400).send({ err });
+  }
     
   });
+
 
   export {cartRouter}
