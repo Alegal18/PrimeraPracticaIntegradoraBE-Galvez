@@ -7,17 +7,20 @@ export default class CartManager {
         if (!fs.existsSync('./carrito.json')) {
 			// escribo el archivo de forma sincronica con un array vacio
             
-			fs.writeFileSync('./carrito.json', JSON.stringify([]));
+			fs.writeFile('./carrito.json', JSON.stringify([]));
 		} 
         this.path = './carrito.json';                       
     } 
     
     async createCart() {
+
+        const carts = await fs.promises.readFile (this.path, 'utf-8');
+        console.log(carts)
         const newCart = {
             id: Date.now(),
             products: [],
         };
-        const carts = await fs.promises.readFile (this.path, 'utf-8');
+        
         carts.push(newCart);
         await fs.promises.writeFile(
             this.path,
@@ -84,5 +87,6 @@ export default class CartManager {
 
 }
 
-let productoCarrito = new CartManager()
+let productoCarrito = new CartManager();
+productoCarrito.createCart()
 

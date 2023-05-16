@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 export default class ProductManager {
-    #id = 0;
+    
     constructor(){
         if (!fs.existsSync('./products.json')) {
 			// escribo el archivo de forma sincronica con un array vacio
@@ -12,12 +12,12 @@ export default class ProductManager {
     }     
     
     
-    async addProduct(product) {        
-        
-        product.id = this.#getId();
-        
+    async addProduct(product) {       
         
         const productos = await this.getProducts();
+
+        product.id = this.#getId(productos);
+
         const productoCodigo = productos.findIndex(
 			(producto) => producto.code === product.code
 		);
@@ -43,10 +43,21 @@ export default class ProductManager {
                  
     }
 
-    #getId() {
-        this.#id++;        
-		return this.#id;       
-    }
+    #getId(products) {
+        if (products.length === 0) {
+            return 1;
+        }   
+        
+        const maxId = products.reduce((acc, product) => {
+            if (product.id > acc) {
+            return product.id;
+            } else {
+            return acc;
+            }
+        }, 0);   
+       
+        return maxId + 1;
+        }
 
     async getProducts() {
         try {
@@ -80,10 +91,10 @@ export default class ProductManager {
         ...productos[productIndex],
         ...newData,
         id: productId 
-        };
+        };  
         
         productos.splice(productIndex, 1, updatedProduct);
-            await fs.promises.writeFile(this.path, JSON.stringify(productos));           
+            fs.writeFileSync(this.path, JSON.stringify(productos, null, 2));;           
         }
     }
 
@@ -111,7 +122,7 @@ let producto = new ProductManager()
 // producto.addProduct('shampoo', 'c.graso', 200, 'sin imagen', 10, 280)
 // producto.addProduct('afeitadora', 'gillete', 800, 'sin imagen', 11, 300);
 // producto.addProduct('perfume', 'colbert', 400, 'sin imagen', 13, 500);
-// producto.upDateProduct(2, 'leche', 'larga vida', 700, 'sin imagen', 2, 20)
+// producto.upDateProduct(12, {price: 300})
 // producto.deleteProduct(1)
 // producto.getProductById(2);
 

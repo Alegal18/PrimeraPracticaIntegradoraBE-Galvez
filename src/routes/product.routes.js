@@ -38,16 +38,14 @@ productsRouter.post('/', (req, res) => {
     res.status(201).send(pos)
 })
 
-productsRouter.put("/:pid", async (req, res) => {
+productsRouter.put("/:pid", (req, res) => {
      const index = req.params.pid
-     let product = req.body;
-    try{          
-        productManager.upDateProduct(index, product)                       
-        res.send(product)
-    } catch (err) {
-        res.status(400).send({err})
-    }    
+     const upDateProduct = req.body;
+     const product = productManager.upDateProduct(index, upDateProduct)
+     res.status(200).json(product);       
+            
 });
+
 productsRouter.delete("/:pid", async (req, res) => {
     const index = req.params.pid    
    try{          

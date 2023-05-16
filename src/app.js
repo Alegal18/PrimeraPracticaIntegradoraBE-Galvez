@@ -15,5 +15,5 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter);
 
 app.listen(8080, () => {
-    console.log('estoy escuchando el 8080')
+    console.log('Escuchando el 8080')
 })
