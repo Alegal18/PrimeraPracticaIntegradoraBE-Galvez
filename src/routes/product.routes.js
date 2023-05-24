@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import ProductManager from '../../productManager.js';
-// import { io } from '../app.js';
+
 
 let productManager = new ProductManager();
 

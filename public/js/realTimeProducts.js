@@ -1,8 +1,8 @@
-import { io } from '../../src/app.js';
+import { io } from 'socket.io';
 
-const socketServer = io();
+const socket = io();
 
-socketServer.on('connect', () => {
+socket.on('connect', () => {
     
     socket.on('newProduct', (product) => {
     
@@ -20,4 +20,5 @@ socketServer.on('connect', () => {
     });
 });
 
-export {io};
+
+
