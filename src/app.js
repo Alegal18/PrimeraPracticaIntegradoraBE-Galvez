@@ -1,69 +1,67 @@
-import fs from 'fs';
-import express from 'express';
-import handlebars from 'express-handlebars'
-import __dirname from './utils.js'
-import http from 'http'
-import { productsRouter } from './routes/product.routes.js';
-import {cartRouter} from './routes/carts.router.js';
-import { Server } from 'socket.io';
 
+import express from 'express';
+import handlebars from 'express-handlebars';
+import path from 'path';
+import { Server } from 'socket.io';
+import ProductManager from './productManager.js';
+import {cartRouter} from './routes/carts.router.js'
+import { productsHtml } from './routes/homeProducts.router.js';
+import { productsRouter } from './routes/product.routes.js';
+import { productsRealTime } from './routes/realTimeProducts.router.js';
+import { __dirname } from './utils.js';
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-
-server.listen(8080, () => {
-    console.log('Escuchando el 8080')
-})
-
-
-app.engine('handlebars', handlebars.engine());
+const port = 8080;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('/public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.urlencoded({ extended:true }));
+//Socket.io webSockets
+const httpServer = app.listen(port, () => {
+  console.log(`app listening on port http://localhost:${port}`);
+});
 
+//socket.io
+const socketServer = new Server(httpServer);
+
+/* Api Rest JSON */
 app.use('/api/products', productsRouter);
-
 app.use('/api/carts', cartRouter);
 
-app.set('views', 'views/');
+/* HTML Render */
+app.use('/home', productsHtml);
+app.use('/realtimeproducts', productsRealTime);
 
+/* Config Handlebars */
+app.engine('handlebars', handlebars.engine());
+app.set('views', path.join(__dirname,'views'));
 app.set('view engine', 'handlebars');
 
-app.use(express.static(__dirname+'public'));
+/* Socket */
+socketServer.on('connection', (socket) => {
+  console.log('Un cliente se ha conectado ');
 
-app.get('/', (req, res) => {
-    const products = getProductList();
-    res.render('index', {products});
-});
-app.get('/realtimeproducts', (req, res) => {
-    const products = getProductList();
-    res.render('realtimeproducts', {products});
-});
+  socket.on('new-product', async (newProduct) => {
+    const data = new ProductManager('./src/data/products.json');
+    console.log(data)
+    await data.addProduct(newProduct);
 
-io.on('connection', (socket) => {
-    console.log('usuario conectado');
+    const products = await data.getProducts();
+    console.log(products);
+    socketServer.emit('products', products);
+  });
 
-    socket.on('newProduct', (product) => {
-        console.log(`Producto ${JSON.stringify(product)} agregado`);
-        io.emit('newProduct', product);
-    });
+  socket.on('delete-product', async (productId) => {
+    const data = new ProductManager('./src/data/products.json');
+    await data.deleteProduct(productId);
 
-    socket.on('deleteProduct', (productId) => {
-        console.log(`Producto ${productId} eliminado`);
-
-        io.emit('deleteProduct', productId);
-    });
-    socket.on('disconnect', () => {
-        console.log('usuario desconectado');
-    });
+    const products = await data.getProducts();
+    socketServer.emit('products', products);
+  });
 });
 
-function getProductList() {
-    const products = JSON.parse(fs.readFileSync('./products.json', 'utf-8'));
-    return products;
-}
-
+app.get('*', (req, res) => {
+  return res.status(404).json({ status: 'error', message: 'No encontrado' });
+});

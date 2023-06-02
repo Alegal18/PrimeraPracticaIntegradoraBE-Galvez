@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import CartManager from '../../cartManager.js';
+import express from 'express';
+import CartManager from '../cartManager.js';
 
-const cartRouter = Router();
+export const cartRouter = express.Router();
 
 let cartManager = new CartManager();
 
@@ -39,4 +39,4 @@ cartRouter.post('/:cid/product/:pid', async(req, res) => {
   });
 
 
-  export {cartRouter}
+  
