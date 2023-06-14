@@ -23,7 +23,11 @@
   <div class='form-floating mb-3'>
     <input class='form-control' type='number' name='stock' id='stock' />
     <label for='floatingInput'>Stock</label>
-  </div>  
+  </div>
+  <div class='form-floating mb-3'>
+    <input class='form-control' type='text' name='category' id='category' />
+    <label for='floatingInput'>Category</label>
+  </div>
   <input class='"send' type='submit' value='Ingresar Producto' />
 </form>
 
@@ -42,10 +46,11 @@
             <li class='list-group-item'>ID: {{id}}</li>
             <li class='list-group-item'>Price: $ {{price}}</li>
             <li class='list-group-item'>Code: {{code}}</li>
-            <li class='list-group-item'>Stock: {{stock}}</li>            
+            <li class='list-group-item'>Stock: {{stock}}</li>
+            <li class='list-group-item'>Category: {{category}}</li>
           </ul>
           <div class='card-body'>
-            <button type='button' class='btn btn-secondary' onclick='deleteProduct({{id}})'>Eliminar</button>
+            <button type='button' class='btn btn-danger' onclick='deleteProduct({{id}})'>Eliminar</button>
           </div>
         </div>
       </div>

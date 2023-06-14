@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "pure",
+    "description": "zapallo",
+    "price": "200",
+    "thumbnail": "sin imagen",
+    "code": "25",
+    "stock": "500",
+    "category": "alimento",
+    "status": true
+  },
+  {
+    "id": 2,
+    "title": "tarta",
+    "description": "zapallo",
+    "price": "100",
+    "thumbnail": "sin imagen",
+    "code": "30",
+    "stock": "1000",
+    "category": "alimento",
+    "status": true
+  }
+]
