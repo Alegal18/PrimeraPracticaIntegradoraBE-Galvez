@@ -7,6 +7,8 @@ productsHtml.get('/', async (req, res) => {
   try {
     const { limit, page, category, sort } = req.query;
     const queryCategory = category ? { category: category } : {};
+    const userSession = req.session.email;
+    const userSessionisAdmin = req.session.isAdmin;
 
     let querySort = {};
     if (sort == 'asc') {
@@ -22,6 +24,7 @@ productsHtml.get('/', async (req, res) => {
 
     let products = docs.map((doc) => {
       return {
+        id: doc.id,
         title: doc.title,
         description: doc.description,
         price: doc.price,
@@ -37,7 +40,26 @@ productsHtml.get('/', async (req, res) => {
       links.push({ label: i, href: 'http://localhost:8080/products?page=' + i });
     }
 
-    return res.status(200).render('home', { products, pagination: rest, links });
+    return res.status(200).render('home', { products, pagination: rest, links, userSession, userSessionisAdmin });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+productsHtml.get('/:pid', async (req, res) => {
+  try {
+    const pid = req.params.pid;
+    const productQuery = await ProductModel.findOne({ _id: pid });
+    let product = {
+      thumbnail: productQuery.thumbnail,
+      title: productQuery.title,
+      description: productQuery.description,
+      price: productQuery.price,
+      code: productQuery.code,
+      stock: productQuery.stock,
+      category: productQuery.category,
+    };
+    return res.status(200).render('productDetail', { product });
   } catch (error) {
     console.log(error);
   }

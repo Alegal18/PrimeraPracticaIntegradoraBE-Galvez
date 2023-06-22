@@ -1,6 +1,6 @@
 const socket = io();
 
-/* SweetAlert2 Para solicitar nombre de usuario */
+
 let nombre = '';
 async function pedirEmail() {
   const { value: nombre } = await Swal.fire({

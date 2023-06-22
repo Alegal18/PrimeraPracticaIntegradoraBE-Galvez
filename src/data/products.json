@@ -20,5 +20,16 @@
     "stock": "1000",
     "category": "alimento",
     "status": true
+  },
+  {
+    "id": 3,
+    "title": "arroz",
+    "description": "gallo",
+    "price": "100",
+    "thumbnail": "sin imagen",
+    "code": "35",
+    "stock": "1000",
+    "category": "alimento",
+    "status": true
   }
 ]

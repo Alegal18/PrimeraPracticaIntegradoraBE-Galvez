@@ -1,5 +1,16 @@
+<script src='/js/carts.js'></script>
+
 <h1>Lista de Productos</h1>
 {{! Pagination }}
+{{#if userSession}}
+  <h3>Bienvenido {{userSession}}</h3>
+  {{#if userSessionisAdmin}}
+    <h5>Admin</h5>
+  {{else}}
+    <h5>User</h5>
+  {{/if}}
+  <a href='/auth/logout'>Cerrar Sesion</a>
+{{/if}}
 {{#if pagination.hasPrevPage}}
   <a href='/products?page={{pagination.prevPage}}'>⬅️{{pagination.prevPage}}</a>
 {{/if}}
@@ -28,11 +39,9 @@
             <li class='list-group-item'>Stock: {{stock}}</li>
             <li class='list-group-item'>Category: {{category}}</li>
           </ul>
+          <a href='/products/{{id}}'>Detalle del producto</a>
+          <button onclick="putIntoCart('{{id}}')">Agregar al carrito:</button>
         </div>
-      </div>
-    {{/each}}
-  </div>
-</div>
       </div>
     {{/each}}
   </div>

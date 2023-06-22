@@ -38,7 +38,7 @@ export function connectSocket(httpServer) {
   const socketServer = new Server(httpServer);
 
   socketServer.on('connection', (socket) => {
-    console.log('Un cliente se ha conectado ' + socket.id);
+    console.log('Un cliente se ha conectado ');
 
     /*************** Add and Delete Products ***************/
     socket.on('new-product', async (newProduct) => {
